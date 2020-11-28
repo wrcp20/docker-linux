@@ -1,0 +1,44 @@
+# autor wrcp20@gmail.com
+#add image con docker 
+docker pull ubuntu:20.04
+#ejecutar un contenedor y se configura la fecha (localtime) y la carpeta de www desde el servidor real al virtual , ademas los puertos 443,80,297
+docker run --name server443_2020 -it -v /etc/localtime:/etc/localtime -v /var/www:/var/www -p297:22 -p443:443 -p80:80  ubuntu:20.04 /bin/bash
+
+# script para cargar los servicios 
+more /ejecutar.sh
+#habilitar apache2
+/etc/init.d/apache2 start
+#habilitar ssh
+/etc/init.d/ssh start
+
+#dentro del contener se copia los archivos del certificado
+# historial 
+
+   1  apt-get update                                      
+   2  apt-get upgrade                                     
+   3  apt-get install apache2                             
+   4  apt-get install openssh-server                      
+   5  apt-get install php                                 
+   6  apt-get install php-mysql                           
+   7  cd /etc/apache2/                                    
+   8  ll                                                  
+   9  mkdir external                                      
+  10  cd sites-available/                                 
+  11  ll                                                  
+  12  a2ensite default-ssl                                
+  13  a2enmod ssl                                         
+  14  /etc/init.d/apache2 restart                         
+  15  ll                                                  
+  16  cd ..                                               
+  17  cd sites-enabled/                                   
+  18  ll                                                  
+  19  apt-get install nano                                
+  20  nano default-ssl.conf                               
+  21  cd ..                                               
+  22  cd external/                                        
+  23  ll                                                  
+  24  cp /var/www/html/app/uta_edu_ec.* .                 
+  25  /etc/init.d/apache2 restart                         
+  en el default-ssl.conf poner los certificados              copiados a la carpeta app
+   
+  # todo ok 
